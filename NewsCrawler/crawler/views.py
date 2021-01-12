@@ -47,11 +47,18 @@ class CrawlerResult(APIView) :
 
         try :
             return [
-                str(entry['title']) for entry in news_feed.entries if  \
+                {
+                    "title" : str(entry['title']) ,
+                    "summary" : str(entry['summary']) ,
+                    "link" : entry['link'], 
+                    "date" : CrawlerResult.generage_date_from_rss(entry['published_parsed']) if 'published_parsed' in entry.keys() else None
+
+                } \
+                for entry in news_feed.entries if  \
                 ('published' in entry.keys() and CrawlerResult.is_in_range(entry['published_parsed'], order['startDate'], order['endDate'])) or \
                  'published' not in entry.keys() 
                  ][:order['newsCount']]
-
+          
         except Exception as exc:
             
             print(f'some error eccured.\n{exc}')
