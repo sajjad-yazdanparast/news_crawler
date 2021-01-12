@@ -53,12 +53,10 @@ class CrawlerResult(APIView) :
         try :
             news_feed = feedparser.parse(order['url'])
         except Exception as url_error :
-            # TODO => call function developed by hossein and pass url as input then get correct rss url as output 
             link = CrawlerResult.get_rss(order['url'])
-            return None 
+            news_feed = feedparser.parse(link)
 
         try :
-           
             return [
                 {
                     "title" : str(entry['title']) ,
@@ -80,7 +78,7 @@ class CrawlerResult(APIView) :
     @staticmethod
     def get_rss(link) :
         
-        return None
+        return "https://khabarfarsi.com/rss/category/2518"
 
     @staticmethod
     def generage_date_from_rss(raw_date_format) -> datetime:
