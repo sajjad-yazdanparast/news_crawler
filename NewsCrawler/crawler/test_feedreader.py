@@ -1,5 +1,5 @@
 import feedparser
-link = 'https://www.irinn.ir/fa/rss/allnews'
+link = 'https://khabarfarsi.com'
 NewsFeed = feedparser.parse(link)
 #print(NewsFeed)
 entry = NewsFeed.entries[0]

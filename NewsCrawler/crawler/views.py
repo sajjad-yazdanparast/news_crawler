@@ -41,6 +41,7 @@ class CrawlerResult(APIView) :
     def mine_news(order:object) :
         try :
             news_feed = feedparser.parse(order['url'])
+            news_feed.entries[0]
         except Exception as url_error :
             link = CrawlerResult.get_rss(order['url'])
             news_feed = feedparser.parse(link)
