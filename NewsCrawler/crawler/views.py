@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.conf import settings
 from rest_framework import status 
 from rest_framework.response import Response 
 from rest_framework.views import APIView
@@ -6,6 +7,8 @@ from .serializer import OrderSerializer
 import feedparser
 from time import mktime
 from datetime import datetime
+import json
+import os 
 
 # Create your views here.
 
@@ -31,6 +34,18 @@ class CrawlerResult(APIView) :
             )
 
 
+    def get (self, *args, **kwargs) :
+        sample_request = json.loads(open(os.path.join(settings.BASE_DIR,'crawler/data/sample_request.json')).read())
+        sample_response = json.loads(open(os.path.join(settings.BASE_DIR,'crawler/data/sample_response.json')).read())
+
+        return Response(
+            data = 
+            {
+                "sample_request" : sample_request ,
+                "sample_response" : sample_response
+            },
+            status = status.HTTP_200_OK
+        )
 
     
     @staticmethod
@@ -45,10 +60,22 @@ class CrawlerResult(APIView) :
         try :
            
             return [
-                str(entry['title']) for entry in news_feed.entries if  \
+                {
+                    "title" : str(entry['title']) ,
+                    "summary" : str(entry['summary']) ,
+                    "link" : entry['link'], 
+                    "date" : CrawlerResult.generage_date_from_rss(entry['published_parsed']) if 'published_parsed' in entry.keys() else None
+
+                } \
+                for entry in news_feed.entries if  \
                 ('published' in entry.keys() and CrawlerResult.is_in_range(entry['published_parsed'], order['startDate'], order['endDate'])) or \
                  'published' not in entry.keys() 
                  ][:order['newsCount']]
+            # return [
+            #     str(entry['title']) for entry in news_feed.entries if  \
+            #     ('published' in entry.keys() and CrawlerResult.is_in_range(entry['published_parsed'], order['startDate'], order['endDate'])) or \
+            #      'published' not in entry.keys() 
+            #      ][:order['newsCount']]
 
         except Exception as exc:
             

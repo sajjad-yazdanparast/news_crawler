@@ -1,0 +1,20 @@
+[
+  {
+    "url": "https://khabarfarsi.com/rss/category/2518",
+    "newsCount": 10,
+    "startDate": "2021-01-10",
+    "endDate": "2021-01-12"
+  },
+  {
+    "url": "https://www.irinn.ir/fa/rss/allnews",
+    "newsCount": 10,
+    "startDate": "2021-01-10",
+    "endDate": "2021-01-12"
+  },
+  {
+    "url": "https://www.isna.ir/rss?pl=197",
+    "newsCount": 3,
+    "startDate": "2021-01-09",
+    "endDate": "2021-01-12"
+  }
+]
