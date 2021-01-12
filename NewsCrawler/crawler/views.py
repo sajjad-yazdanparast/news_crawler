@@ -71,12 +71,7 @@ class CrawlerResult(APIView) :
                 ('published' in entry.keys() and CrawlerResult.is_in_range(entry['published_parsed'], order['startDate'], order['endDate'])) or \
                  'published' not in entry.keys() 
                  ][:order['newsCount']]
-            # return [
-            #     str(entry['title']) for entry in news_feed.entries if  \
-            #     ('published' in entry.keys() and CrawlerResult.is_in_range(entry['published_parsed'], order['startDate'], order['endDate'])) or \
-            #      'published' not in entry.keys() 
-            #      ][:order['newsCount']]
-
+          
         except Exception as exc:
             
             print(f'some error eccured.\n{exc}')
