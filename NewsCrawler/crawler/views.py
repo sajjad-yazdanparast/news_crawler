@@ -1,5 +1,4 @@
 from django.shortcuts import render
-from django.conf import settings
 from rest_framework import status 
 from rest_framework.response import Response 
 from rest_framework.views import APIView
@@ -7,8 +6,10 @@ from .serializer import OrderSerializer
 import feedparser
 from time import mktime
 from datetime import datetime
-import json
-import os 
+from googlesearch import search
+from bs4 import BeautifulSoup
+import urllib.request
+import re
 
 # Create your views here.
 
@@ -34,18 +35,6 @@ class CrawlerResult(APIView) :
             )
 
 
-    def get (self, *args, **kwargs) :
-        sample_request = json.loads(open(os.path.join(settings.BASE_DIR,'crawler/data/sample_request.json')).read())
-        sample_response = json.loads(open(os.path.join(settings.BASE_DIR,'crawler/data/sample_response.json')).read())
-
-        return Response(
-            data = 
-            {
-                "sample_request" : sample_request ,
-                "sample_response" : sample_response
-            },
-            status = status.HTTP_200_OK
-        )
 
     
     @staticmethod
@@ -60,27 +49,42 @@ class CrawlerResult(APIView) :
         try :
            
             return [
-                {
-                    "title" : str(entry['title']) ,
-                    "summary" : str(entry['summary']) ,
-                    "link" : entry['link'], 
-                    "date" : CrawlerResult.generage_date_from_rss(entry['published_parsed']) if 'published_parsed' in entry.keys() else None
-
-                } \
-                for entry in news_feed.entries if  \
+                str(entry['title']) for entry in news_feed.entries if  \
                 ('published' in entry.keys() and CrawlerResult.is_in_range(entry['published_parsed'], order['startDate'], order['endDate'])) or \
                  'published' not in entry.keys() 
                  ][:order['newsCount']]
-          
+
         except Exception as exc:
             
             print(f'some error eccured.\n{exc}')
             return None
 
     @staticmethod
-    def get_rss(link) :
-        
-        return None
+    def get_rss(base):
+        response = ""
+        query = "site:" + base + " rss"
+        address = next(search(query, tld="co.in", num=10, stop=10, pause=2))
+        html_page = urllib.request.urlopen(address)
+        soup = BeautifulSoup(html_page, "html.parser")
+        for link in soup.findAll('a'):
+            l = link.get('href')
+            if l is not None:
+                tx = re.search("^/+.*(rss)+.*", l)
+                if tx and CrawlerResult.is_rss(base + l):
+                    response = base + l
+                    break
+
+        return response
+
+    @staticmethod
+    def is_rss(url):
+        html_page = urllib.request.urlopen(url)
+        soup = BeautifulSoup(html_page, "lxml")
+        result = soup.findAll('rss')
+        if len(result) > 0:
+            return True
+        else:
+            return False
 
     @staticmethod
     def generage_date_from_rss(raw_date_format) -> datetime:
