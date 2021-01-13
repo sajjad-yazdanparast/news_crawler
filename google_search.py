@@ -37,5 +37,5 @@ def find_rss_url(base):
 	return response
 
 
-print(find_rss_url("https://www.bbc.com"))
+print(find_rss_url("https://nytimes.com‏"))
 
