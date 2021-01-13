@@ -68,23 +68,23 @@ class CrawlerResult(APIView) :
     @staticmethod
     def get_rss(base):
         response = ""
-	query = "site:" +base+  " rss"
-	address =next(search(query, tld="co.in", num=10, stop=10, pause=2))
-	html_page = urllib.request.urlopen(address)
-	soup = BeautifulSoup(html_page, "html.parser")
-	for link in soup.findAll('a'):
-		l = link.get('href')
-		if l is not None:
-			if re.search("(rss)+.*",l):
-				if re.search("^/.*" , l):
-					l = base + l
-			else:
-				continue
-			if CrawlerResult.is_rss(l):
-				response = l
-				break
+        query = "site:" +base+  " rss"
+        address =next(search(query, tld="co.in", num=10, stop=10, pause=2))
+        html_page = urllib.request.urlopen(address)
+        soup = BeautifulSoup(html_page, "html.parser")
+        for link in soup.findAll('a'):
+            l = link.get('href')
+            if l is not None:
+                if re.search("(rss)+.*",l):
+                    if re.search("^/.*" , l):
+                        l = base + l
+                else:
+                    continue
+                if CrawlerResult.is_rss(l):
+                    response = l
+                    break
 
-	return response
+        return response
 
     @staticmethod
     def is_rss(url):
