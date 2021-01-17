@@ -3,11 +3,21 @@ import PropTypes from 'prop-types';
 import jMoment from 'moment-jalaali';
 import JalaaliUtils from '@date-io/jalaali';
 import { Avatar, Checkbox, Tooltip, TextField, Grid } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from "@material-ui/pickers";
 
 jMoment.loadPersian({ dialect: 'persian-modern', usePersianDigits: true });
 
+const useStyles = makeStyles(theme => ({
+  root: {
+    '& > *': {
+      margin: theme.spacing(1),
+    }
+  }
+}));
+
 export const WebsiteInfo = (props) => {
+  const classes = useStyles();
   const {
     handleToggleCheck,
     handleChangeNewsCount,
@@ -24,7 +34,14 @@ export const WebsiteInfo = (props) => {
   } = props.data;
 
   return (
-    <Grid container>
+    <Grid
+      container
+      direction={'row'}
+      justify={'center'}
+      alignItems={'center'}
+      wrap={'nowrap'}
+      className={classes.root}
+    >
       <Checkbox
         checked={checked}
         onChange={handleToggleCheck}
@@ -33,13 +50,14 @@ export const WebsiteInfo = (props) => {
         <Avatar alt={'name'} src={avatar} />
       </Tooltip>
       <TextField
-        disabled={!checked}
+        value={name}
         label={'نام سایت'}
+        disabled={!checked}
         InputProps={{
           readOnly: true,
         }}
         variant={'outlined'}
-        value={name}
+        size={'small'}
       />
       <TextField
         id={'news-count'}
@@ -52,6 +70,7 @@ export const WebsiteInfo = (props) => {
         value={newsCount}
         onChange={handleChangeNewsCount}
         variant={'outlined'}
+        size={'small'}
       />
       <MuiPickersUtilsProvider utils={JalaaliUtils} locale={'fa'}>
         <KeyboardDatePicker
@@ -65,6 +84,7 @@ export const WebsiteInfo = (props) => {
           value={selectedStartDate}
           onChange={handleChangeStartDate}
           inputVariant={'outlined'}
+          size={'small'}
         />
       </MuiPickersUtilsProvider>
       <MuiPickersUtilsProvider utils={JalaaliUtils} locale={'fa'}>
@@ -79,6 +99,7 @@ export const WebsiteInfo = (props) => {
           value={selectedEndDate}
           onChange={handleChangeEndDate}
           inputVariant={'outlined'}
+          size={'small'}
         />
       </MuiPickersUtilsProvider>
     </Grid>

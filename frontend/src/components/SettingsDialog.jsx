@@ -25,7 +25,7 @@ export const SettingsDialog = (props) => {
   }
 
   return (
-    <Dialog open={open} onClose={handleClose}>
+    <Dialog open={open} onClose={handleClose} fullWidth maxWidth={'md'}>
       <DialogTitle>
         <Typography>
           انتخاب سایت‌های خبری
@@ -67,7 +67,7 @@ export const SettingsDialog = (props) => {
           color={'primary'}
           variant={'contained'}
         >
-          ثبت
+          جست‌وجو
         </Button>
       </DialogActions>
     </Dialog>
