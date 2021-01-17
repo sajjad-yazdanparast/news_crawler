@@ -45,7 +45,7 @@ export const NewsListContainer = (props) => {
         newsList && newsList.fetchedNews && newsList.fetchedNews.length > 1 &&
           newsList.fetchedNews.filter(({url}) => url !== '').map(({ url, news }, index) => {
             return (
-              news.map((item, i) =>
+              news && news.map((item, i) =>
                 <NewsCard
                   key={i}
                   avatar={() => {

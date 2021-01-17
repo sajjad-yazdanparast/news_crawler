@@ -110,7 +110,7 @@ export const NewsCard = (props) => {
 
 NewsCard.propTypes = {
   avatar: PropTypes.func,
-  name: PropTypes.func,
+  name: PropTypes.string,
   url: PropTypes.string,
   title: PropTypes.string,
   summary: PropTypes.string,
