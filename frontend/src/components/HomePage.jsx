@@ -6,6 +6,8 @@ import update from 'immutability-helper';
 import { Grid } from '@material-ui/core';
 import { Header } from "./Header";
 import { defaultWebsites } from "../assets/DefaultWebsites";
+import { getNews } from "../redux/actions/NewsActions";
+import {NewsListContainer} from "./NewsListContainer";
 
 class HomePage extends React.Component {
 
@@ -23,8 +25,8 @@ class HomePage extends React.Component {
         name,
         checked: false,
         newsCount: 0,
-        selectedStartDate: null,
-        selectedEndDate: null,
+        selectedStartDate: moment(),
+        selectedEndDate: moment(),
         ...rest,
       };
     });
@@ -52,7 +54,21 @@ class HomePage extends React.Component {
   };
 
   handleSubmitWebsiteData = () => {
-
+    const { websiteList } = this.state;
+    const { getNews } = this.props;
+    let objectToSend = [];
+    Object.keys(websiteList).forEach( name => {
+      if(websiteList[name].checked) {
+        const { url, newsCount, selectedStartDate, selectedEndDate } = websiteList[name];
+        objectToSend.push({
+          url,
+          newsCount,
+          startDate: moment(selectedStartDate).locale('en').format('YYYY-MM-DD'),
+          endDate: moment(selectedEndDate).locale('en').format('YYYY-MM-DD'),
+        });
+      }
+    });
+    getNews(objectToSend);
   };
 
   render() {
@@ -63,21 +79,26 @@ class HomePage extends React.Component {
           handleChangeWebSiteList={this.handleChangeWebSiteList}
           handleSubmitWebsiteData={this.handleSubmitWebsiteData}
         />
+        <NewsListContainer
+          newsList={this.props.newsList && this.props.newsList}
+          websiteList={this.state.websiteList}
+        />
       </Grid>
     );
   }
 }
 
 HomePage.propTypes = {
-
+  newsList: PropTypes.shape({}),
+  getNews: PropTypes.func,
 };
 
 const mapStateToProps = (state) => ({
-
+  newsList: state.newsList,
 });
 
-const mapDispatchToProps = (dispatch) => ({
-
+const mapDispatchToProps = dispatch => ({
+  getNews: filteredData => dispatch(getNews(filteredData)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomePage);

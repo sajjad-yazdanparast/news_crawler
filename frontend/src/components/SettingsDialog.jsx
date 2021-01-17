@@ -1,7 +1,6 @@
 import React, {useState} from "react";
 import PropTypes from 'prop-types';
 import { Dialog,
-  DialogContentText,
   DialogContent,
   DialogActions,
   DialogTitle,
@@ -61,7 +60,10 @@ export const SettingsDialog = (props) => {
           انصراف
         </Button>
         <Button
-          onClick={handleSubmitWebsiteData}
+          onClick={() => {
+            handleSubmitWebsiteData();
+            handleClose();
+          }}
           color={'primary'}
           variant={'contained'}
         >

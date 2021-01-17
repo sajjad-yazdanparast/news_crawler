@@ -1,22 +1,17 @@
 import axios from "axios";
-export const getNews = (requestData) => dispatch => {
-  const actionData = {};
+export const getNews = (filteredData) => dispatch => {
   dispatch({
     type: 'GET_NEWS_REQUESTED',
-    //...TODO fill this action
   })
-  let url = `127.0.0.1:8000/api`;
-  return axios.post(url, requestData)
-    .then((response) => {
-      dispatch({
+  let url = `http://127.0.0.1:8000/api/crawler/result/`;
+  return axios.post(url, filteredData)
+    .then((response) => dispatch({
         type: 'GET_NEWS_RECEIVED',
-        //...TODO fill this action
+        payload: response.data,
       })
-    })
-    .catch((error) => {
-      dispatch({
+    )
+    .catch((error) => dispatch({
         type: 'GET_NEWS_FAILURE',
-        //...TODO fill this action
       })
-    });
+    );
 }

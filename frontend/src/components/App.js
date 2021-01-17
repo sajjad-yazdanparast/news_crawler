@@ -4,7 +4,6 @@ import rtl from 'jss-rtl';
 import { ThemeProvider, createMuiTheme } from "@material-ui/core";
 import { StylesProvider, jssPreset } from '@material-ui/core/styles'
 import '../style/App.css';
-import {Header} from "./Header";
 import HomePage from "./HomePage";
 
 // Configure JSS
